@@ -1,7 +1,7 @@
 import random
 
 
-def get_current_weather(location, unit="fahrenheit"):
+def _get_current_weather(location, unit="fahrenheit"):
     if unit == "celsius":
         temperature = random.randint(-34, 43)
     else:

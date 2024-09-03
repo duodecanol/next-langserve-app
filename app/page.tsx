@@ -13,6 +13,14 @@ const examples = [
     title: 'useChat with attachments',
     link: '/03-chat-attachments',
   },
+  {
+    title: 'vanilla openai chat with langserve backend.',
+    link: '/04-vanilla-openai-langserve',
+  },
+  {
+    title: 'Rudimentary openai agent with Langchain',
+    link: '/05-chat-agent-lc',
+  },
 ];
 
 export default function Home() {

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn api.index:app --reload",
+    "fastapi-dev": "pip install -r requirements.txt && DEBUG=True python -m uvicorn api.index:app --reload",
     "next-dev": "next dev",
     "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
     "build": "next build",
@@ -12,18 +12,21 @@
   },
   "dependencies": {
     "@ai-sdk/ui-utils": "latest",
+    "@langchain/core": "^0.2.31",
+    "@langchain/openai": "^0.2.8",
     "ai": "latest",
     "geist": "^1.3.1",
+    "langchain": "^0.2.17",
     "next": "latest",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1",
     "@types/node": "^17.0.12",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.14",
+    "concurrently": "^8.0.1",
     "eslint": "^7.32.0",
     "eslint-config-next": "14.2.3",
     "postcss": "^8.4.23",
