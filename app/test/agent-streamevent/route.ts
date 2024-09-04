@@ -1,6 +1,6 @@
 import { AIStreamCallbacksAndOptions, createCallbacksTransformer, Message } from 'ai';
 import { RemoteRunnable } from "@langchain/core/runnables/remote";
-import { LogStreamCallbackHandlerInput } from "@langchain/core/tracers/log_stream"
+import { LogStreamCallbackHandlerInput, StreamEvent } from "@langchain/core/tracers/log_stream"
 import { applyPatch } from '@langchain/core/utils/json_patch';
 
 import { formatStreamPart } from "@ai-sdk/ui-utils"
@@ -19,22 +19,22 @@ type LangChainMessageContentText = {
 type LangChainMessageContentImageUrl = {
   type: 'image_url';
   image_url:
-    | string
-    | {
-        url: string;
-        detail?: LangChainImageDetail;
-      };
+  | string
+  | {
+    url: string;
+    detail?: LangChainImageDetail;
+  };
 };
 
 type LangChainMessageContentComplex =
   | LangChainMessageContentText
   | LangChainMessageContentImageUrl
   | (Record<string, any> & {
-      type?: 'text' | 'image_url' | string;
-    })
+    type?: 'text' | 'image_url' | string;
+  })
   | (Record<string, any> & {
-      type?: never;
-    });
+    type?: never;
+  });
 
 type LangChainMessageContent = string | LangChainMessageContentComplex[];
 
@@ -52,12 +52,14 @@ type LangChainStreamEvent = {
 /**
 Converts LangChain output streams to AIStream.
 
+- Supports only "v2" for `RemoteRunnable.streamEvent`
+
 The following streams are supported:
 - `LangChainAIMessageChunk` streams (LangChain `model.stream` output)
 - `string` streams (LangChain `StringOutputParser` output)
  */
-function toLogStream(
-  stream: ReadableStream<string>,
+function toDataStream(
+  stream: ReadableStream<StreamEvent>,
   callbacks?: AIStreamCallbacksAndOptions,
 ) {
   return stream
@@ -67,7 +69,7 @@ function toLogStream(
       >({
         transform: async (value, controller) => {
           // text stream:
-          console.log(typeof value, JSON.stringify(value))
+          console.log(typeof value, JSON.stringify(value));
 
           if (typeof value === 'string') {
             controller.enqueue(value);
@@ -80,7 +82,6 @@ function toLogStream(
           if (!value?.data?.chunk) return;
 
           const chunk = value.data.chunk;
-          const encoder = new TextEncoder();
 
           switch (value.event) {
             // chunk is AIMessage Chunk for `on_chat_model_stream` event:
@@ -100,16 +101,16 @@ function toLogStream(
               break;
             }
             case 'on_chain_stream': {
-              console.log(">>>>>>>>>>>>>>>")
-              console.log(value.data.chunk)
+              console.log(">>>>>>>>>>>>>>>");
+              console.log(value.data.chunk);
               if (!!!value.data.chunk[Symbol.iterator]) {
                 console.log(value.data.chunk.id);
                 console.log(value.data.chunk.kwargs);
-                console.log("<<<<<<<<<<<<<<<")
+                console.log("<<<<<<<<<<<<<<<");
                 return;
               }
               for (const chunkItem of value.data?.chunk) {
-                if(chunkItem?.tool) {
+                if (chunkItem?.tool) {
                   const id = chunkItem.tool_call_id;
                   const name = chunkItem.tool;
                   const args = chunkItem.tool_input;
@@ -118,10 +119,10 @@ function toLogStream(
                     toolName: name,
                     args: args,
                   }
-                  console.log("@@@@@@@@@", data)
+                  console.log("@@@@@@@@@", data);
                   controller.enqueue(`9:${JSON.stringify(data)}\n`);
                 }
-                console.log("<<<<<<<<<<<<<<<")
+                console.log("<<<<<<<<<<<<<<<");
               }
               break;
             }
@@ -133,7 +134,7 @@ function toLogStream(
       }),
     )
     .pipeThrough(createCallbacksTransformer(callbacks))
-    // .pipeThrough(createStreamDataTransformer());
+  // .pipeThrough(createStreamDataTransformer());
 }
 
 
@@ -149,7 +150,7 @@ export async function POST(req: Request) {
   const lastMessage = messages.pop();
   const input = lastMessage?.content;
   const chatHistory = messages;
-  const agentPayload = {input: input, chat_history: chatHistory};
+  const agentPayload = { input: input, chat_history: chatHistory };
 
   const model = new RemoteRunnable({
     url: `http://localhost:8000/api/agent/`,
@@ -162,16 +163,16 @@ export async function POST(req: Request) {
     ignoreRetriever: false,
     autoClose: false,
   }
-  const eventStream = await model.streamEvents(agentPayload, { version: "v2"}, handlerInput);
+  const eventStream = await model.streamEvents(agentPayload, { version: "v2" }, handlerInput);
 
-  const finalStream = toLogStream(eventStream);
+  const finalStream = toDataStream(eventStream);
   console.log("stream: ", finalStream);
 
   return new Response(finalStream, {
     // return new Response(stream, {
     headers: {
       "content-type": "text/event-stream",
-      "x-vercel-ai-data-stream" : "v1",
+      "x-vercel-ai-data-stream": "v1",
     },
   });
 }
