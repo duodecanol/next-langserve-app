@@ -40,7 +40,7 @@ To learn more about the Vercel AI SDK, Next.js, and FastAPI take a look at the f
 - [Next.js Docs](https://nextjs.org/docs) - learn about Next.js features and API.
 - [FastAPI Docs](https://fastapi.tiangolo.com) - learn about FastAPI features and API.
 
-
+```sh
 curl -v -X POST 'http://localhost:3000/api/chat' \
   -H 'Content-Type: application/json' \
   --data-raw $'{"messages":[{"role":"user","content":"What\'s the weather in Seoul?"}]}'
@@ -53,10 +53,34 @@ curl -v -X POST 'http://localhost:3000/test/openai' \
 curl -v -X POST 'http://localhost:3000/test/agent' \
   --data-raw $'{"messages":[{"role":"user","content":"What\'s the weather in Seoul?"}]}'
 
+curl 'http://localhost:3000/test/agent-streamevent' \
+  -H 'Content-Type: application/json' \
+  -H 'Connection: keep-alive' \
+  --data-raw $'{"messages":[{"role":"user","content":"Howdy"},{"role":"user","content":"What is the weather in LA?"}]}'
+
+
+curl -v -X POST 'http://localhost:8000/api/agent/stream_events' \
+  -H 'Content-Type: application/json' \
+  --data-raw $'{"input":{"input":"What\'s the weather in Seoul?", "chat_history": []}}'
+
+curl -v -X POST 'http://localhost:8000/api/agent/stream_log' \
+  -H 'Content-Type: application/json' \
+  --data-raw $'{"input":{"input":"What\'s the weather in Seoul?", "chat_history": []}}'
+```
+
+## Sample
+
+* tools = [get_current_weather, special_summarization_tool]
+
+-----------------
 
 What's the weather in Seoul?
 
+-----------------
+
 Would you please summarize the following text for me?
+
+-----------------
 
 If the Chinese Communist party truly believes it has a territorial claim to Taiwan, then it should also be trying to take back land from Russia, Taiwan’s president, Lai Ching-te, has said.
 
@@ -74,8 +98,10 @@ However, Lai, who was elected president in January, noted that China also lost l
 
 He said Beijing’s true motivations were geopolitical, wanting to change the world order in its favour. Taiwan is a major island in the first island chain of the Pacific, and control would give the CCP highly strategic access and passage, as well as increased control of the Taiwan strait.
 
-
-
-
+-----------------
 
 Thank you very much for your assistant. It was very helpful.
+
+-----------------
+
+

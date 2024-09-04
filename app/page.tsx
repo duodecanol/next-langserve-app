@@ -21,6 +21,10 @@ const examples = [
     title: 'Rudimentary openai agent with Langchain',
     link: '/05-chat-agent-lc',
   },
+  {
+    title: 'Langchain agent RemoteRunnable call and ad hoc transform streamEvent',
+    link: '/06-chat-agent-lc-custom-stream-event',
+  },
 ];
 
 export default function Home() {
