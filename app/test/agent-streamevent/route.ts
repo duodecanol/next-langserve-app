@@ -1,6 +1,6 @@
 import { AIStreamCallbacksAndOptions, createCallbacksTransformer, Message } from 'ai';
 import { RemoteRunnable } from "@langchain/core/runnables/remote";
-import { LogStreamCallbackHandlerInput, StreamEvent } from "@langchain/core/tracers/log_stream"
+import { LogStreamCallbackHandlerInput, StreamEvent } from "@langchain/core/tracers/log_stream.cjs"
 import { applyPatch } from '@langchain/core/utils/json_patch';
 
 import { formatStreamPart } from "@ai-sdk/ui-utils"
