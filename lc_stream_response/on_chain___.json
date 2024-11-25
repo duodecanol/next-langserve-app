@@ -1,0 +1,221 @@
+{
+    "event": "on_chain_stream",
+    "name": "RunnableLambda",
+    "run_id": "4ac589a1-3ae7-48db-ae21-0f3f10990e72",
+    "tags": [
+        "map:key:agent_scratchpad"
+    ],
+    "metadata": {},
+    "data": {
+        "chunk": [
+            {
+                "lc": 1,
+                "type": "constructor",
+                "id": [
+                    "langchain_core",
+                    "messages",
+                    "AIMessageChunk"
+                ],
+                "kwargs": {
+                    "content": "",
+                    "tool_calls": [],
+                    "invalid_tool_calls": [],
+                    "tool_call_chunks": [],
+                    "additional_kwargs": {},
+                    "response_metadata": {}
+                }
+            },
+            {
+                "lc": 1,
+                "type": "constructor",
+                "id": [
+                    "langchain_core",
+                    "messages",
+                    "ToolMessage"
+                ],
+                "kwargs": {
+                    "content": "{\"temperature\": 56, \"unit\": \"fahrenheit\", \"location\": \"Los Angeles\"}",
+                    "tool_call_id": "call_KOkmlOyVrChJTbqnfY2pngjd",
+                    "status": "success",
+                    "additional_kwargs": {},
+                    "response_metadata": {}
+                }
+            }
+        ]
+    }
+}
+
+{
+    "event": "on_chain_end",
+    "name": "RunnableLambda",
+    "run_id": "4ac589a1-3ae7-48db-ae21-0f3f10990e72",
+    "tags": [
+        "map:key:agent_scratchpad"
+    ],
+    "metadata": {},
+    "data": {
+        "input": {
+            "input": "What is the weather in LA?",
+            "chat_history": [
+                {
+                    "lc": 1,
+                    "type": "constructor",
+                    "id": [
+                        "langchain_core",
+                        "messages",
+                        "HumanMessage"
+                    ],
+                    "kwargs": {
+                        "content": "Howdy",
+                        "additional_kwargs": {},
+                        "response_metadata": {}
+                    }
+                }
+            ],
+            "intermediate_steps": [
+                [
+                    {
+                        "tool": "get_current_weather",
+                        "tool_input": {
+                            "location": "Los Angeles"
+                        },
+                        "log": "\nInvoking: `get_current_weather` with `{'location': 'Los Angeles'}`\n\n\n",
+                        "type": "AgentActionMessageLog",
+                        "message_log": [
+                            {
+                                "lc": 1,
+                                "type": "constructor",
+                                "id": [
+                                    "langchain_core",
+                                    "messages",
+                                    "AIMessageChunk"
+                                ],
+                                "kwargs": {
+                                    "content": "",
+                                    "tool_calls": [],
+                                    "invalid_tool_calls": [],
+                                    "tool_call_chunks": [],
+                                    "additional_kwargs": {},
+                                    "response_metadata": {}
+                                }
+                            }
+                        ],
+                        "tool_call_id": "call_KOkmlOyVrChJTbqnfY2pngjd"
+                    },
+                    {
+                        "temperature": 56,
+                        "unit": "fahrenheit",
+                        "location": "Los Angeles"
+                    }
+                ]
+            ]
+        },
+        "output": [
+            {
+                "lc": 1,
+                "type": "constructor",
+                "id": [
+                    "langchain_core",
+                    "messages",
+                    "AIMessageChunk"
+                ],
+                "kwargs": {
+                    "content": "",
+                    "tool_calls": [],
+                    "invalid_tool_calls": [],
+                    "tool_call_chunks": [],
+                    "additional_kwargs": {},
+                    "response_metadata": {}
+                }
+            },
+            {
+                "lc": 1,
+                "type": "constructor",
+                "id": [
+                    "langchain_core",
+                    "messages",
+                    "ToolMessage"
+                ],
+                "kwargs": {
+                    "content": "{\"temperature\": 56, \"unit\": \"fahrenheit\", \"location\": \"Los Angeles\"}",
+                    "tool_call_id": "call_KOkmlOyVrChJTbqnfY2pngjd",
+                    "status": "success",
+                    "additional_kwargs": {},
+                    "response_metadata": {}
+                }
+            }
+        ]
+    }
+}
+
+{
+    "event": "on_chain_end",
+    "name": "RunnableSequence",
+    "run_id": "34a860e4-d35b-4043-b7e9-6ebad16745b9",
+    "tags": [],
+    "metadata": {},
+    "data": {
+        "input": {
+            "input": "What is the weather in LA?",
+            "chat_history": [
+                {
+                    "lc": 1,
+                    "type": "constructor",
+                    "id": [
+                        "langchain_core",
+                        "messages",
+                        "HumanMessage"
+                    ],
+                    "kwargs": {
+                        "content": "Howdy",
+                        "additional_kwargs": {},
+                        "response_metadata": {}
+                    }
+                }
+            ],
+            "intermediate_steps": [
+                [
+                    {
+                        "tool": "get_current_weather",
+                        "tool_input": {
+                            "location": "Los Angeles"
+                        },
+                        "log": "\nInvoking: `get_current_weather` with `{'location': 'Los Angeles'}`\n\n\n",
+                        "type": "AgentActionMessageLog",
+                        "message_log": [
+                            {
+                                "lc": 1,
+                                "type": "constructor",
+                                "id": [
+                                    "langchain_core",
+                                    "messages",
+                                    "AIMessageChunk"
+                                ],
+                                "kwargs": {
+                                    "content": "",
+                                    "tool_calls": [],
+                                    "invalid_tool_calls": [],
+                                    "tool_call_chunks": [],
+                                    "additional_kwargs": {},
+                                    "response_metadata": {}
+                                }
+                            }
+                        ],
+                        "tool_call_id": "call_KOkmlOyVrChJTbqnfY2pngjd"
+                    },
+                    {
+                        "temperature": 56,
+                        "unit": "fahrenheit",
+                        "location": "Los Angeles"
+                    }
+                ]
+            ]
+        },
+        "output": {
+            "returnValues": {
+                "output": "The current weather in Los Angeles is 56°F."
+            },
+            "log": "The current weather in Los Angeles is 56°F."
+        }
+    }
+}
