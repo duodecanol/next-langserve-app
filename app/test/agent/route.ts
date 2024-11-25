@@ -1,5 +1,7 @@
 import { LangChainAdapter, Message, StreamData } from 'ai';
 import { RemoteRunnable } from "@langchain/core/runnables/remote";
+import { coerceVercelMessageToLCMessage } from '@/app/langchain/messages/messageUtil';
+
 
 
 // Allow streaming responses up to 30 seconds
@@ -16,7 +18,7 @@ export async function POST(req: Request) {
 
   const lastMessage = messages.pop();
   const input = lastMessage?.content;
-  const chatHistory = messages;
+  const chatHistory = messages.map(coerceVercelMessageToLCMessage);
   const payload = {input: input, chat_history: chatHistory};
   console.log("payload: ", payload)
 

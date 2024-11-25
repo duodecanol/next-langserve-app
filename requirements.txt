@@ -1,7 +1,7 @@
-rich==13.7.1
+rich
 python-dotenv
-pydantic<2
 langchain
 langchain-openai
 langchain-community
 langserve[all]
+ruff

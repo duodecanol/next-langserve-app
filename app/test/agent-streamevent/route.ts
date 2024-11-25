@@ -1,9 +1,9 @@
 import { AIStreamCallbacksAndOptions, createCallbacksTransformer, Message } from 'ai';
 import { RemoteRunnable } from "@langchain/core/runnables/remote";
 import { LogStreamCallbackHandlerInput, StreamEvent } from "@langchain/core/tracers/log_stream.cjs"
-import { applyPatch } from '@langchain/core/utils/json_patch';
 
 import { formatStreamPart } from "@ai-sdk/ui-utils"
+import { coerceVercelMessageToLCMessage } from "@/app/langchain/messages/messageUtil"
 
 
 // Allow streaming responses up to 30 seconds
@@ -127,7 +127,7 @@ function toDataStream(
               break;
             }
             default: {
-              console.log(value.data?.chunk?.type);
+              chunk && console.log(chunk.type);
             }
           }
         },
@@ -136,6 +136,7 @@ function toDataStream(
     .pipeThrough(createCallbacksTransformer(callbacks))
   // .pipeThrough(createStreamDataTransformer());
 }
+
 
 
 export async function POST(req: Request) {
@@ -149,8 +150,10 @@ export async function POST(req: Request) {
 
   const lastMessage = messages.pop();
   const input = lastMessage?.content;
-  const chatHistory = messages;
+  const chatHistory = messages.map(coerceVercelMessageToLCMessage);
   const agentPayload = { input: input, chat_history: chatHistory };
+
+  console.log("chatHistory: ", chatHistory);
 
   const model = new RemoteRunnable({
     url: `http://localhost:8000/api/agent/`,
@@ -163,13 +166,13 @@ export async function POST(req: Request) {
     ignoreRetriever: false,
     autoClose: false,
   }
+  console.log(agentPayload);
   const eventStream = await model.streamEvents(agentPayload, { version: "v2" }, handlerInput);
 
   const finalStream = toDataStream(eventStream);
   console.log("stream: ", finalStream);
 
   return new Response(finalStream, {
-    // return new Response(stream, {
     headers: {
       "content-type": "text/event-stream",
       "x-vercel-ai-data-stream": "v1",
