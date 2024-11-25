@@ -25,6 +25,10 @@ const examples = [
     title: 'Langchain agent RemoteRunnable call and ad hoc transform streamEvent',
     link: '/06-chat-agent-lc-custom-stream-event',
   },
+  {
+    title: 'MoeLive agent RemoteRunnable chat invoke',
+    link: '/07-chat-moelive-agent-invoke',
+  },
 ];
 
 export default function Home() {
