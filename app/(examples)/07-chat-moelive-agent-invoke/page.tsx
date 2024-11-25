@@ -5,6 +5,7 @@ import { useChat } from 'ai/react';
 import { GeistMono } from 'geist/font/mono';
 import { Markdown } from '@/app/components/markdown';
 import { Message } from 'ai/react';
+import { SparklesIcon, UserIcon, BotIcon } from '@/app/components/icons';
 
 export default function Page() {
   const {
@@ -25,12 +26,42 @@ export default function Page() {
       }
     });
 
+  const giveMeIcon = (message: Message) => {
+    switch (message.role) {
+      case "assistant":
+        return (
+          <div className="w-24 text-zinc-500 flex-shrink-0">
+            <BotIcon />
+            {`${message.role}: `}
+            <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
+              <SparklesIcon size={14} />
+            </div>
+          </div>
+        )
+      case "user":
+        return (
+          <div className="w-24 text-zinc-500 flex-shrink-0">
+            <UserIcon />
+            {`${message.role}: `}
+          </div>
+        )
+      default:
+        return (
+          <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
+            <SparklesIcon size={14} />
+          </div>
+        )
+
+    }
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col p-4 gap-2">
         {messages.map((message: Message) => (
           <div key={message.id} className="flex flex-row gap-2">
-            <div className="w-24 text-zinc-500 flex-shrink-0">{`${message.role}: `}</div>
+
+            {giveMeIcon(message)}
 
             <div className="flex flex-col gap-2">
               {message.content && (
