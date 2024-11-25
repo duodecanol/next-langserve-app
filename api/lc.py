@@ -1,21 +1,20 @@
-from typing import List, Literal, Union
+from typing import Literal, Sequence
 
 from langchain.agents import AgentExecutor, create_tool_calling_agent
-from langchain.pydantic_v1 import BaseModel as BaseModelV1
-from langchain.pydantic_v1 import Field as FieldV1
+from langchain_core.messages import AnyMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import tool
-from pydantic import BaseModel, Field
+from pydantic import BaseModel as BaseModel, Field
 
 from .config import client
 from .utils.tools import _get_current_weather
 
 
-class GetCurrentWeatherParam(BaseModelV1):
-    location: str = FieldV1(description="The city and state, e.g. San Francisco, CA")
-    unit: Literal["celsius", "fahrenheit"] = FieldV1(
+class GetCurrentWeatherParam(BaseModel):
+    location: str = Field(description="The city and state, e.g. San Francisco, CA")
+    unit: Literal["celsius", "fahrenheit"] = Field(
         default="celsius",
         description="The temperature unit to use. Infer this from the users location.",
     )
@@ -56,9 +55,6 @@ prompt = ChatPromptTemplate.from_messages(
 agent = create_tool_calling_agent(client, tools, prompt)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-from langchain_core.messages import AIMessage, FunctionMessage, HumanMessage
-from langchain_core.runnables import RunnableConfig
-
 
 class Input(BaseModel):
     input: str
@@ -68,7 +64,7 @@ class Input(BaseModel):
     # Keep in mind that playground support for agents is not great at the moment.
     # To get a better experience, you'll need to customize the streaming output
     # for now.
-    chat_history: List[Union[HumanMessage, AIMessage, FunctionMessage]] = Field(
+    chat_history: Sequence[AnyMessage] = Field(
         ...,
         extra={"widget": {"type": "chat", "input": "input", "output": "output"}},
     )
