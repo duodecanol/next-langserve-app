@@ -1,0 +1,33 @@
+{
+    "event": "on_chat_model_stream",
+    "name": "ChatOpenAI",
+    "run_id": "db81e7aa-5da8-4cdd-b637-b5d56e69e3a4",
+    "tags": [
+        "seq:step:3"
+    ],
+    "metadata": {
+        "ls_provider": "openai",
+        "ls_model_name": "gpt-3.5-turbo",
+        "ls_model_type": "chat",
+        "ls_temperature": 0.7
+    },
+    "data": {
+        "chunk": {
+            "lc": 1,
+            "type": "constructor",
+            "id": [
+                "langchain_core",
+                "messages",
+                "AIMessageChunk"
+            ],
+            "kwargs": {
+                "content": "°F",
+                "tool_calls": [],
+                "invalid_tool_calls": [],
+                "tool_call_chunks": [],
+                "additional_kwargs": {},
+                "response_metadata": {}
+            }
+        }
+    }
+}
